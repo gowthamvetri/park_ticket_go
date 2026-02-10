@@ -21,7 +21,8 @@ const Navbar = () => {
         {title:"Home",loc:"/dashboard"},
         {title:"Bills",loc:"/adminBills"},
         {title:"Tokens",loc:"/adminToken"},
-        {title:"Profile",loc:"/profile"}
+        {title:"Profile",loc:"/profile"},
+        {title:"Vehicles",loc:"/vehicles"}
     ]
 
     console.log(user)

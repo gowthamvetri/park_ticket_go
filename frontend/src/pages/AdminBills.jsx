@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import {RoughNotation} from "react-rough-notation"
+import img from "../assets/empty.png"
+import { toast } from 'react-toastify'
 
 const AdminBills = () => {
 
@@ -53,9 +55,9 @@ const AdminBills = () => {
             headers:{
                         Authorization:`Bearer ${localStorage.getItem("token")}`
                     }
-          }).then((data)=>console.log(data)).catch(err=>console.log(err))
+          }).then((data)=>toast.success("Bill generated successfully")).catch(err=>toast.error("Unable to generate bill make sure that token is valid"))
     
-        //   setGen((pre)=>!pre)
+          setGen((pre)=>!pre)
           fetchBills()
         }catch(err){
           console.log(err)
@@ -80,30 +82,43 @@ const AdminBills = () => {
                 </RoughNotation>
               </h1>
         <div className='absolute bottom-10 right-10 bg-gray-500/60 p-5 rounded-full text-white' onClick={()=>setGen((pre)=>!pre)}><FaPlus/></div>
-        <div>
+        {   bills.length > 0 ?
+            (<div>
             <table className='grid grid-cols-1 items-center'>
-                <tr className='grid grid-cols-6 border text-2xl'>
+                <tr className='grid grid-cols-7 border text-2xl'>
                     <th>Bill Id</th>
                     <th>Token Id</th>
                     <th>Vehicle Id</th>
                     <th>User Id</th>
                     <th>Total Cost</th>
+                    <th>Payment Status</th>
                     <th>Departured Date</th>
                 </tr>
                 {
                     bills.map((data,key)=>(
-                        <tr key={key} className='grid grid-cols-6 text-center border-collapse'>
+                        <tr key={key} className='grid grid-cols-7 text-center border-collapse'>
                             <td className='border px-2 py-3'>{data._id}</td>
                             <td className='border px-2 py-3'>{data.token}</td>
                             <td className='border px-2 py-3'>{vehicles[key]}</td>
                             <td className='border px-2 py-3'>{users[key]}</td>
-                            <td className='border px-2 py-3'>{data.totalCost}</td>
+                            <td className='border px-2 py-3'>₹{data.totalCost}</td>
+                            <td className='border px-2 py-3'>
+                                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${data.ispaid ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                    {data.ispaid ? '✓ PAID' : '✗ UNPAID'}
+                                </span>
+                            </td>
                             <td className='border px-2 py-3'>{new Date(data.departuredDate).toLocaleString()}</td>
                         </tr>
                     ))
                 }
             </table>
-        </div>
+        </div>):(
+            <div>
+                <img src={img} alt="" />
+                <h1 className='text-center text-4xl text-gray-400 animate-bounce'>No bills generated yet . Empty!!!</h1>
+            </div>
+        )
+        }
         {
             gen && (
                 <div className='absolute w-full h-full bg-black/40 flex items-center justify-center'>

@@ -14,6 +14,9 @@ import SingleToken from './pages/singleToken.jsx'
 import { ToastContainer } from 'react-toastify'
 import AdminTokens from './pages/AdminTokens.jsx'
 import AdminBills from './pages/AdminBills.jsx'
+import PaymentSuccess from './pages/PaymentSuccess.jsx'
+import PaymentCancel from './pages/PaymentCancel.jsx'
+import AdminVehicles from './pages/AdminVehicles.jsx'
 
 
 function App() {
@@ -66,6 +69,22 @@ function App() {
           <Route path='/adminBills' element={
             <Protected>
               <AdminBills/>
+            </Protected>
+          }/>
+          <Route path='/payment-success' element={
+            <Protected>
+              <PaymentSuccess/>
+            </Protected>
+          }/>
+          <Route path='/payment-cancel' element={
+            <Protected>
+              <PaymentCancel/>
+            </Protected>
+          }/>
+
+          <Route path='/vehicles' element={
+            <Protected>
+              <AdminVehicles/>
             </Protected>
           }/>
 

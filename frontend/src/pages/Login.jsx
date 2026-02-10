@@ -47,9 +47,9 @@ const Login = () => {
 
   return (
     <div className='flex justify-center items-center relative py-60'>
-        <div className='absolute bg-black/50 w-full h-full z-[-1]'></div>
+        {/* <div className='absolute bg-black/50 w-full h-full z-[-1]'></div> */}
         <video autoPlay loop muted className='w-full h-full absolute z-[-2] object-cover inset-0' > <source src={car} type='video/mp4'/> </video>
-        <div className='sm:min-w-sm max-w-md min-w-xs bg-gray-300 px-7 py-12 scale-110 flex flex-col gap-7 rounded-tl-[5rem] rounded-br-[5rem]'>
+        <div className='sm:min-w-sm max-w-md min-w-xs bg-gray-300/90 border-2 border-gray-300 px-10 py-12 scale-110 flex flex-col gap-7 rounded-tl-[5rem] rounded-br-[5rem]'>
             <h1 className='text-center text-2xl font-medium'>Login</h1>
             <form action="" className='flex flex-col gap-7'>
                 <input className='border p-2 rounded' type="email" placeholder='Email@example.com' name='email' value={user.email} onChange={handleChange}/>

@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import {RoughNotation} from "react-rough-notation"
+import img from "../assets/empty.png"
 
 const AdminTokens = () => {
 
@@ -56,6 +57,7 @@ const AdminTokens = () => {
 
       setGen((pre)=>!pre)
       fetchBills()
+      
     }catch(err){
       console.log(err)
     }
@@ -78,7 +80,8 @@ const AdminTokens = () => {
         </RoughNotation>
       </h1>
         <div className='absolute bottom-10 right-10 bg-gray-500/60 p-5 rounded-full text-white' onClick={()=>setGen((pre)=>!pre)}><FaPlus/></div>
-        <div>
+        { bills.length > 0 ?
+        (<div>
             <table className='grid grid-cols-1 items-center'>
                 <tr className='grid grid-cols-6 border text-2xl'>
                     <th>Token Id</th>
@@ -101,7 +104,13 @@ const AdminTokens = () => {
                     ))
                 }
             </table>
-        </div>
+        </div>) : (
+              <div>
+                <img src={img} alt="" />
+                <h1 className='text-center text-4xl text-gray-400 animate-bounce'>No tokens generated yet . Empty!!!</h1>
+            </div>
+        )
+}
         {
             gen && (
                 <div className='absolute w-full h-full bg-black/40 flex items-center justify-center'>

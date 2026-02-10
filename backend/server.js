@@ -4,12 +4,18 @@ import db from "./config/db.config.js"
 import authRoutes from "./routes/auth.routes.js"
 import adminRoutes from "./routes/admin.routes.js"
 import userRoutes from "./routes/user.routes.js"
+import paymentRoutes from "./routes/payment.routes.js"
+import { handleWebhook } from "./controller/payment.controller.js"
 import cors from "cors"
 
 
 dotenv.config()
 
 const app = express()
+
+// Webhook route must be before express.json() to get raw body
+app.post('/api/webhook', express.raw({ type: 'application/json' }), handleWebhook);
+
 app.use(express.json())
 app.use(cors([
     "http://localhost:5173/**"
@@ -17,7 +23,8 @@ app.use(cors([
 
 app.use('/api',authRoutes);
 app.use("/api",adminRoutes);
-app.use("/api",userRoutes)
+app.use("/api",userRoutes);
+app.use("/api",paymentRoutes);
 
 
 

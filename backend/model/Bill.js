@@ -19,6 +19,14 @@ const billSchema = mongoose.Schema({
         type:Number,
         required:true
     },
+    ispaid:{
+        type:Boolean,
+        default:false
+    },
+    paymentSessionId:{
+        type:String,
+        default:null
+    },
     departuredDate:{
         type:Date,
         default:new Date()
