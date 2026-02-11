@@ -25,7 +25,7 @@ const Navbar = () => {
         {title:"Vehicles",loc:"/vehicles"}
     ]
 
-    console.log(user)
+    // console.log(user)
 
     const navList = role==="User" ? userList : adminList
 

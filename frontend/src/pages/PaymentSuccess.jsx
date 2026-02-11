@@ -40,19 +40,19 @@ const PaymentSuccess = () => {
     }, [sessionId]);
 
     return (
-        <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-green-50 to-green-100 px-4">
+        <div className="min-h-[80vh] flex items-center justify-center bg-gray-50 px-4">
             <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 text-center">
                 {verifying ? (
                     <div className="flex flex-col items-center gap-6">
-                        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-green-600"></div>
+                        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-gray-500"></div>
                         <h2 className="text-2xl font-bold text-gray-800">Verifying Payment...</h2>
                         <p className="text-gray-600">Please wait while we confirm your payment</p>
                     </div>
                 ) : (
                     <div className="flex flex-col items-center gap-6">
-                        <div className="bg-green-100 rounded-full p-6">
+                        <div className="bg-gray-50 rounded-full p-6">
                             <svg
-                                className="w-20 h-20 text-green-600"
+                                className="w-20 h-20 text-gray-400"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -65,7 +65,7 @@ const PaymentSuccess = () => {
                                 />
                             </svg>
                         </div>
-                        <h1 className="text-3xl font-bold text-green-600">Payment Successful!</h1>
+                        <h1 className="text-3xl font-bold text-gray-500">Payment Successful!</h1>
                         <p className="text-gray-600 text-lg">
                             Your parking bill has been paid successfully.
                         </p>
@@ -76,7 +76,7 @@ const PaymentSuccess = () => {
                         <div className="flex flex-col gap-3 w-full mt-4">
                             <button
                                 onClick={() => navigate(`/bill/${billId}`)}
-                                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                                className="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
                             >
                                 View Bill Details
                             </button>

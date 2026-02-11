@@ -4,6 +4,7 @@ import User from "../model/User.js";
 import Vehicle from "../model/Vehicle.js";
 import Token from "../model/Token.js";
 import Bill from "../model/Bill.js";
+import { sendMail } from "../config/mailer.js";
 
 export const createUser = async(req,res)=>{
     if(req.role==="Admin"){
@@ -148,76 +149,126 @@ export const getUser = async(req,res)=>{
     })
 }
 
-export const generateToken = async(req,res)=>{
-
-    if(req.role==="Admin"){
-        console.log(req.body)
-        const {name,email,phone,vno,vmodel} = req.body.data
-
-        console.log(name)
-
-        let user = await User.findOne({email:email})
-
-        if(!user){
-            const hash = await bcrypt.hash((name.substring(0,4)+phone.substring(0,4)),10)
-        
-            const auth = new Auth({
-                email:email,
-                password:hash
+export const generateToken = async (req, res) => {
+    try {
+        if (req.role !== "Admin") {
+            console.log(req.body)
+            return res.status(403).json({
+                message: "You are not allowed to access this endpoint",
+                error: true,
+                success: false
             })
-            
+        }
+
+        const { name, email, phone, vno, vmodel } = req.body
+
+        if (!name || !email || !phone || !vno || !vmodel) {
+            return res.status(400).json({
+                message: "All fields are required",
+                error: true,
+                success: false
+            })
+        }
+
+        let user = await User.findOne({ email })
+
+        if (!user) {
+            const hash = await bcrypt.hash(
+                name.substring(0, 4) + phone.substring(0, 4),
+                10
+            )
+
+            const auth = new Auth({ email, password: hash })
             await auth.save()
 
-            user = new User({
-                name:name,
-                email:email,
-                phone:phone
-            })
-
+            user = new User({ name, email, phone })
             await user.save()
         }
-        
+
+        let vehicle = await Vehicle.findOne({ vno })
+
+        if (vehicle && vehicle.isParked) {
+            return res.json({
+                message: "Vehicle already parked here",
+                error: true,
+                success: false
+            })
+        }
+
+        if (!vehicle) {
+            vehicle = new Vehicle({
+                vno,
+                vmodel,
+                user: user._id,
+                isParked: true
+            })
+            await vehicle.save()
+        } else {
+            vehicle.isParked = true
+            await vehicle.save()
+        }
+
+        const token = new Token({
+            vehicle: vehicle._id,
+            user: user._id,
+            vno
+        })
+
+        await token.save()
+
+        const data = {
+            to:email,
+            subject:"Mail for token generation to confirm the parking",
+            html:`
+                <div style="font-family: sans-serif; border: 1px solid #c3e6cb; background-color: #d4edda; color: #155724; padding: 15px; border-radius: 5px; max-width: 400px; margin: 20px auto; text-align: center;">
+                <span style="font-size: 20px; margin-right: 10px;">✅</span>
+                <strong>Success!</strong> Token generated successfully.
+                <div style="margin-top: 10px; font-family: monospace; background: #fff; padding: 5px; border: 1px dashed #155724; word-break: break-all;">
+                    ${token._id}
+                </div>
+                </div>`
+        }
+
+        sendMail(data)
+
+        return res.status(200).json({
+            message: "Vehicle parked and token generated",
+            error: false,
+            success: true,
+            data: token
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error",
+            error: true,
+            success: false
+        })
+    }
+}
+
+
+export const getVehiclesById = async(req,res)=>{
+    if(req.role==="Admin"){
         try {
-            if(!vno || !vmodel){
-                return res.status(402).json({
-                    message:"The above mentioned fields are necessary",
-                    error:true,
-                    success:false
+            const {id} = req.params
+            const vehicles = await Vehicle.findOne({_id:id})
+
+            if(vehicles.length==0){
+                return res.status(201).json({
+                message:"There are no Vehicles available",
+                error:false,
+                success:true
                 })
             }
 
-            let vehicle = await Vehicle.findOne({vno:vno})
-            // console.log(vehicle)
-
-            if(!vehicle){
-
-                vehicle = new Vehicle({
-                vno:vno,
-                vmodel:vmodel,
-                user:user._id
-            })
-
-            await vehicle.save()
-            }
-
-            await Vehicle.findByIdAndUpdate(vehicle._id,{$set:{
-                isParked:true
-            }},{new:true})
-
-            const token = new Token({
-                vehicle:vehicle._id,
-                user:user._id,
-                vno:vno
-            })
-
-            await token.save()
-
             return res.status(200).json({
-                message:"Vehicle parked and token generated",
+                message:"Vehicles retrived successfully",
                 error:false,
                 success:true,
-                data:token
+                data:vehicles
             })
+
             
         } catch (error) {
             return res.status(500).json({
@@ -226,8 +277,8 @@ export const generateToken = async(req,res)=>{
                 success:false
             })
         }
+        
     }
-
     return res.status(404).json({
         message:"You are not allowed to access this endpoint",
         error:true,
@@ -238,8 +289,7 @@ export const generateToken = async(req,res)=>{
 export const getAllVehicles = async(req,res)=>{
     if(req.role==="Admin"){
         try {
-            const {id} = req.params
-            const vehicles = await Vehicle.findOne({_id:id})
+            const vehicles = await Vehicle.find()
 
             if(vehicles.length==0){
                 return res.status(201).json({
@@ -347,6 +397,26 @@ export const generateBill = async(req,res)=>{
             }},{new:true})
 
             await Token.findByIdAndUpdate(token._id,{$set:{isValid:false}},{new:true})
+
+            const data = {
+            to:user.email,
+            subject:"Mail for Bill generation to ensure parking ended",
+            html:`
+                <div style="font-family: Arial, sans-serif; border: 1px solid #eee; padding: 20px; max-width: 600px; margin: auto;">
+                    <h2 style="color: #333;">Invoice Generated</h2>
+                    <p>Dear Customer,</p>
+                    <p>Please find your bill in our website.</p>
+                    <p>The total bill : ${totalbill}</p>
+                    <p>The Bill id : ${bill._id}</p>
+                    <hr style="border: 0; border-top: 1px solid #eee;">
+                    <p style="font-size: 12px; color: #777; text-align: center;">
+                        This is an automated bill generated from Park to go.Thank you 😊
+                    </p>
+                </div>
+            `
+        }
+
+        sendMail(data)
 
 
             return res.status(200).json({
@@ -530,7 +600,7 @@ export const changePass = async(req,res)=>{
 
             const resu = await Auth.findOneAndUpdate({email:req.email},{$set:{password:hashPass}},{new:true})
 
-            console.log(resu)
+            // console.log(resu)
 
              return res.status(200).json({
                 message:"Admin password changed successfully",
@@ -548,6 +618,39 @@ export const changePass = async(req,res)=>{
 
     }
 
+    return res.status(404).json({
+        message:"You are not allowed to access this endpoint",
+        error:true,
+        success:false
+    })
+}
+
+export const getVehicleIdfromNumber = async(req,res)=>{
+    if(req.role==="Admin"){
+        try {
+            const {id} = req.params
+            const vehicle = await Vehicle.findOne({vno:id})
+
+            return res.status(200).json({
+                message:"Retrived the vehicle id",
+                data:{
+                    _id:vehicle._id
+                },
+                error:false,
+                success:true
+
+            })
+
+            
+        } catch (error) {
+            return res.status(500).json({
+                message:"Internal server error :"+error,
+                error:true,
+                success:false
+            })
+        }
+
+    }
     return res.status(404).json({
         message:"You are not allowed to access this endpoint",
         error:true,

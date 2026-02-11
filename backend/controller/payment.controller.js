@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import Bill from "../model/Bill.js";
 import dotenv from "dotenv";
+import { sendMail } from "../config/mailer.js";
 
 dotenv.config();
 
@@ -58,6 +59,29 @@ export const createCheckoutSession = async (req, res) => {
                 currency: 'INR'
             },
         });
+
+        const data = {
+            to:bill.user.email,
+            subject:"Mail for Payment confirmation of parking",
+            html:`
+                <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; max-width: 500px; margin: auto;">
+                    <div style="text-align: center; color: #2ecc71;">
+                        <h1 style="margin: 0;">Payment Successful!</h1>
+                    </div>
+                    <p style="font-size: 16px; color: #333;">Hello,</p>
+                    <p style="font-size: 16px; color: #555;">
+                        Thank you for your payment. Your transaction was completed successfully.
+                    </p>
+                    <div style="background-color: #f9f9f9; padding: 10px; border-radius: 5px;">
+                        <p style="margin: 5px 0;"><strong>Order ID:</strong> #12345</p>
+                        <p style="margin: 5px 0;"><strong>Amount:</strong> $50.00</p>
+                    </div>
+                    <p style="color: #777; font-size: 14px;">If you have any questions, please contact our support team.</p>
+                </div>
+                `
+        }
+
+        sendMail(data)
 
         return res.status(200).json({
             message: "Checkout session created successfully",

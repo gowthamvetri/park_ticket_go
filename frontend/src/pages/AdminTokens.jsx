@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import {RoughNotation} from "react-rough-notation"
 import img from "../assets/empty.png"
+import {toast} from "react-toastify"
 
 const AdminTokens = () => {
 
-    const [bills,setBills] = useState([])
+    const [tokens,setTokens] = useState([])
     const [users,setUsers] = useState([])
     const [gen,setGen] = useState(false)
     const [data,setData] = useState({
@@ -16,6 +17,7 @@ const AdminTokens = () => {
       vno:"",
       vmodel:""
     })
+    const [find,setFind] = useState("")
 
     const handleChange  = (e)=>{
       e.preventDefault()
@@ -25,52 +27,72 @@ const AdminTokens = () => {
     }
 
     const getUsers = async()=>{
-        bills.forEach(async(data)=>{
-            await axios.get(`http://localhost:8080/api/getUser/${data.user}`,{
-                headers:{
-                    Authorization:`Bearer ${localStorage.getItem("token")}`
-                }
-        }).then((data)=>setUsers((pre)=>[...pre,data.data.data.name])).catch(err=>console.log(err))
+        const response = await axios.get("http://localhost:8080/api/getAllUsers",{
+            headers:{
+                Authorization:`Bearer ${localStorage.getItem("token")}`
+            }
         })
+        // console.log(response)
+        setUsers(response.data.data)
     }
 
 
-    const fetchBills = async()=>{
-        await axios.get("http://localhost:8080/api/getAllGeneratedTokens",{
-                headers:{
-                    Authorization:`Bearer ${localStorage.getItem("token")}`
-                }
-        }).then((data)=>setBills(data.data.data)).catch(err=>console.log(err))
+    const fetchTokens = async()=>{
+        const response = await axios.get("http://localhost:8080/api/getAllGeneratedTokens",{
+             headers:{
+                Authorization:`Bearer ${localStorage.getItem("token")}`
+            }
+        })
+        console.log(response)
+        setTokens(response.data.data)
     }
+
+    const getUserById = (uid) =>{
+        const user = users.find((usr)=>usr._id==uid)
+        return user?.name
+    }
+
+    const handleFilter = (find)=>{
+        const token = tokens.filter((tkn)=>tkn.vno==find)
+        if(token.length > 0){
+            setTokens(token)
+            toast.success("Token retrived Successfully")
+        }else{
+            toast.error("Unable to find the token")
+        }
+    }
+
+    const handleClearFilter = ()=>{
+        setFind("");
+        fetchTokens()
+    }
+
+
 
     const handleGenToken = async(e)=>{
       e.preventDefault()
+        
+    
 
-      try{
-      await axios.post("http://localhost:8080/api/generateToken",{
-        data
-      },{
-        headers:{
-                    Authorization:`Bearer ${localStorage.getItem("token")}`
-                }
-      }).then((data)=>console.log(data)).catch(err=>console.log(err))
-
-      setGen((pre)=>!pre)
-      fetchBills()
+    const response = await axios.post("http://localhost:8080/api/generateToken",data,{headers:{Authorization:`Bearer ${localStorage.getItem("token")}`}})
       
-    }catch(err){
-      console.log(err)
+    if(response.data.success){
+            toast.success("Token generated successfully");
+      }else{
+        toast.error(response.data.message)
+      }
+  
+    setGen((pre)=>!pre)
+    fetchTokens()
+    
     }
-    }
-
-    console.log(bills)
     useEffect(()=>{
-        fetchBills()
+        fetchTokens()
     },[])
 
     useEffect(()=>{
         getUsers()
-    },[bills])
+    },[tokens])
 
   return (
     <div className='flex items-center justify-center min-h-[70vh] relative flex-col gap-10'>
@@ -79,25 +101,38 @@ const AdminTokens = () => {
         Token Page
         </RoughNotation>
       </h1>
-        <div className='absolute bottom-10 right-10 bg-gray-500/60 p-5 rounded-full text-white' onClick={()=>setGen((pre)=>!pre)}><FaPlus/></div>
-        { bills.length > 0 ?
-        (<div>
+        {/* <div className='absolute bottom-10 right-10 bg-gray-500/60 p-5 rounded-full text-white' onClick={()=>setGen((pre)=>!pre)}><FaPlus/></div> */}
+        { tokens.length > 0 ?
+        (<div className='flex flex-col gap-5 items-center'>
+            <div className='grid grid-cols-3 w-full gap-5 items-center'>
+                    <div className='text-center w-fit'>
+                        <label className='w-full text-xl' htmlFor="">Enter the Vehicle number </label>
+                    </div>
+                    <div className='flex items-center w-full justify-center'>
+                        <input type="text" className='border-2 w-full py-3 px-2' onChange={(e)=>{setFind(e.target.value)}} value={find}/>
+                    </div>
+                    <div className='flex items-center justify-center gap-10'>
+                        <input className='px-4 py-2 bg-gray-400 text-white rounded-lg cursor-pointer capitalize' type="submit" onClick={()=>handleFilter(find)}/>
+                        <input className='px-4 py-2 bg-gray-400 text-white rounded-lg cursor-pointer capitalize' type="submit" value={"clear"} onClick={()=>handleClearFilter()} />
+                         <input className='px-4 py-2 bg-gray-400 text-white rounded-lg cursor-pointer capitalize' type='submit' value={"Add Entry"} onClick={()=>setGen((pre)=>!pre)}/>
+                    </div>
+                </div>
             <table className='grid grid-cols-1 items-center'>
                 <tr className='grid grid-cols-6 border text-2xl'>
                     <th>Token Id</th>
                     <th>Vehicle Id</th>
                     <th>Vehicle No</th>
-                    <th>User Id</th>
+                    <th>User Name</th>
                     <th>parkedAt</th>
                     <th>IsValid</th>
                 </tr>
                 {
-                    bills.map((data,key)=>(
+                    tokens.map((data,key)=>(
                         <tr key={key} className='grid grid-cols-6 text-center border-collapse'>
-                            <td className='border px-2 py-3'>{data._id}</td>
-                            <td className='border px-2 py-3'>{data.vehicle}</td>
+                            <td className='border px-2 py-3'>{data._id.substring(0,7)}...</td>
+                            <td className='border px-2 py-3'>{data.vehicle.substring(0,7)}...</td>
                             <td className='border px-2 py-3'>{data.vno}</td>
-                            <td className='border px-2 py-3'>{users[key]}</td>
+                            <td className='border px-2 py-3'>{getUserById(data.user)}</td>
                             <td className='border px-2 py-3'>{new Date(data.parkedAt).toLocaleString()}</td>
                             <td className='border px-2 py-3'>{data.isValid ? "True" : "False"}</td>
                         </tr>

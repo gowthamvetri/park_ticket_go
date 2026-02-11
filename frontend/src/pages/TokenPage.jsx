@@ -44,13 +44,14 @@ const TokenPage = () => {
           tokens.map((data,key)=>{
             return(
               <div className="bg-[url(https://t3.ftcdn.net/jpg/06/47/28/24/360_F_647282434_Ld7DJpnBZXP3CuuvdXeWND4qIoSMop5H.jpg)] bg-opacity-90 bg-no-repeat bg-cover w-[480px] h-[210px] flex flex-col items-center justify-center relative object-contain cursor-pointer rotate-180" onClick={()=>location(`/token/${data._id}`)}>
+                <div className='absolute rotate-180 -bottom-4 -left-4 bg-gray-400 px-4 py-1 rounded-lg'>{data.isValid?"Valid":"Invalid"}</div>
                 <div className='absolute h-2 w-10 -top-2 -left-3 animate-ping'><img src={img} alt="" /></div>
                 <div className='absolute h-2 w-10 bottom-7 -right-4 animate-ping'><img src={img} alt="" /></div>
                 <div className='flex flex-col items-center justify-center pl-5 rotate-180'>
-                  <h1 >Token id: {data._id}</h1>
+                  <h1 >Token id: {data._id.substring(0,7)}...</h1>
                   <h1>Vehicle No : {data.vno}</h1>
-                  <h1 >Vehicle id:{data.vehicle}</h1>
-                  <h1 className='text-xs'>{data.parkedAt}</h1>
+                  <h1 >Vehicle id:{data.vehicle.substring(0,7)}...</h1>
+                  <h1 >{new Date(data.parkedAt).toDateString()+" "+new Date(data.parkedAt).toLocaleTimeString()}</h1>
                 </div>
               </div>
             )
