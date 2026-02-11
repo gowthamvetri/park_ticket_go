@@ -10,7 +10,7 @@ import BillPage from "./pages/BillPage.jsx"
 import TokenPage from "./pages/TokenPage.jsx"
 import Footer from './components/Footer.jsx'
 import SingleBill from './pages/SingleBill.jsx'
-import SingleToken from './pages/singleToken.jsx'
+import SingleToken from './pages/SingleToken.jsx'
 import { ToastContainer } from 'react-toastify'
 import AdminTokens from './pages/AdminTokens.jsx'
 import AdminBills from './pages/AdminBills.jsx'
