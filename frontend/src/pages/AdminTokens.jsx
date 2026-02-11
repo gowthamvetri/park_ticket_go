@@ -27,7 +27,7 @@ const AdminTokens = () => {
     }
 
     const getUsers = async()=>{
-        const response = await axios.get("http://localhost:8080/api/getAllUsers",{
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllUsers`,{
             headers:{
                 Authorization:`Bearer ${localStorage.getItem("token")}`
             }
@@ -38,7 +38,7 @@ const AdminTokens = () => {
 
 
     const fetchTokens = async()=>{
-        const response = await axios.get("http://localhost:8080/api/getAllGeneratedTokens",{
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllGeneratedTokens`,{
              headers:{
                 Authorization:`Bearer ${localStorage.getItem("token")}`
             }
@@ -74,7 +74,7 @@ const AdminTokens = () => {
         
     
 
-    const response = await axios.post("http://localhost:8080/api/generateToken",data,{headers:{Authorization:`Bearer ${localStorage.getItem("token")}`}})
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}generateToken`,data,{headers:{Authorization:`Bearer ${localStorage.getItem("token")}`}})
       
     if(response.data.success){
             toast.success("Token generated successfully");

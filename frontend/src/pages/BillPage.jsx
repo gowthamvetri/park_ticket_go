@@ -11,7 +11,7 @@ const BillPage = () => {
   const location = useNavigate()
 
   const fetchBills = async()=>{
-    await axios.get("http://localhost:8080/api/getAllBills",{
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllBills`,{
       headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }

@@ -11,7 +11,7 @@ const AdminVehicles = () => {
   const [find,setFind] = useState("")
 
   const fetchVehicles = async()=>{
-     await axios.get("http://localhost:8080/api/getAllVehicles",{
+     await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllVehicles`,{
       headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }
@@ -42,7 +42,7 @@ const AdminVehicles = () => {
 
   const fetchUser = async() => {
     try{
-    const response = await axios.get(`http://localhost:8080/api/getAllUsers`,{
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllUsers`,{
        headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }

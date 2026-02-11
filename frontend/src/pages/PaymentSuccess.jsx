@@ -14,7 +14,7 @@ const PaymentSuccess = () => {
         const verifyPayment = async () => {
             try {
                 const response = await axios.post(
-                    'http://localhost:8080/api/verify-payment',
+                    `${import.meta.env.VITE_BACKEND_URL}verify-payment`,
                     { sessionId },
                     {
                         headers: {

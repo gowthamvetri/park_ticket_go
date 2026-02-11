@@ -27,13 +27,13 @@ const Profile = () => {
   const handleSubmit = async()=>{
     // e.preventDefault()
     if(role==='User'){
-    const res = await axios.patch("http://localhost:8080/api/update",{
+    const res = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}update`,{
       name:user.name,email:user.email,phone:user.phone 
     }, { headers:{Authorization:`Bearer ${localStorage.getItem("token")}`}})
     notify(res.data.message)
     return
   }
-    const res = await axios.patch("http://localhost:8080/api/changePass",{
+    const res = await axios.patch(`${import.meta.env.VITE_BACKEND_URL}changePass`,{
       password:password
     }, { headers:{Authorization:`Bearer ${localStorage.getItem("token")}`}})
     notify(res.data.message)
@@ -52,7 +52,7 @@ const Profile = () => {
   }
 
   const fetchAdmin = async()=>{
-          await axios.get("http://localhost:8080/api/getAdmin",{
+          await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAdmin`,{
                   headers:{
                       Authorization:`Bearer ${localStorage.getItem("token")}`
                   }
@@ -60,7 +60,7 @@ const Profile = () => {
       }
   
       const fetchUser = async()=>{
-              await axios.get("http://localhost:8080/api/getInfo",{
+              await axios.get("${import.meta.env.VITE_BACKEND_URL}getInfo",{
                   headers:{
                       Authorization:`Bearer ${localStorage.getItem("token")}`
                   }

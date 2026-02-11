@@ -26,7 +26,7 @@ const AdminBills = () => {
     }
 
     const getUsers = async()=>{
-        const response = await axios.get("http://localhost:8080/api/getAllUsers",{
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllUsers`,{
             headers:{
                 Authorization:`Bearer ${localStorage.getItem("token")}`
             }
@@ -37,7 +37,7 @@ const AdminBills = () => {
     }
 
     const getAllVehicle = async()=>{
-        const response = await axios.get("http://localhost:8080/api/getAllVehicles",{
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllVehicles`,{
             headers:{
                 Authorization:`Bearer ${localStorage.getItem("token")}`
             }
@@ -47,7 +47,7 @@ const AdminBills = () => {
     }
 
     const fetchBills = async()=>{
-        await axios.get("http://localhost:8080/api/getAllGeneratedBills",{
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllGeneratedBills`,{
                 headers:{
                     Authorization:`Bearer ${localStorage.getItem("token")}`
                 }
@@ -85,7 +85,7 @@ const AdminBills = () => {
           e.preventDefault()
     
           try{
-          await axios.post("http://localhost:8080/api/generateBill",{
+          await axios.post(`${import.meta.env.VITE_BACKEND_URL}generateBill`,{
             vno:vno
           },{
             headers:{

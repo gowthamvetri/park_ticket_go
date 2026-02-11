@@ -23,7 +23,7 @@ const Login = () => {
         e.preventDefault()
         
         try{
-            await axios.post("http://localhost:8080/api/login",{
+            await axios.post(`${import.meta.env.VITE_BACKEND_URL}login`,{
                 email:user.email,
                 password:user.password
             }).then((data)=>{

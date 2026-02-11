@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import car from "../assets/car.mp4"
+import axios from "axios"
+import {toast} from "react-toastify"
 
 const Register = () => {
     const [user,setUser] = useState({
@@ -8,7 +10,7 @@ const Register = () => {
         consfirmPass:"",
         password:""
     })
-
+    const navigate = useNavigate()
     const handleChange = (e)=>{
         setUser((data)=>({
             ...data,
@@ -16,10 +18,22 @@ const Register = () => {
         }))
     }
 
-    const handleSubmit = (e)=>{
+    const handleSubmit = async(e)=>{
         e.preventDefault()
 
-        console.log(user)
+        if(user.password===user.consfirmPass){
+            try{
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}login`,{
+                email:user.email,
+                password:user.password
+            })
+            navigate("/")
+            toast.success("Account Registered Successfully")
+        }catch(err){
+            toast.error("Unable to register "+err)
+        }
+        }
+        toast.error("Unable to create account make sure password are matched")
     }
 
   return (

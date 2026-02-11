@@ -12,7 +12,7 @@ const TokenPage = () => {
   const location = useNavigate()
 
   const fetchBills = async()=>{
-    await axios.get("http://localhost:8080/api/getAllTokens",{
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAllTokens`,{
       headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }

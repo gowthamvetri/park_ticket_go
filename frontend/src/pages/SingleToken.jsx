@@ -8,7 +8,7 @@ const SingleToken = () => {
     const {id} = useParams()
 
     const fetchVehicle = async()=>{
-        await axios.get(`http://localhost:8080/api/getVehicle/${token?.vehicle}`,{
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}getVehicle/${token?.vehicle}`,{
         headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }
@@ -16,7 +16,7 @@ const SingleToken = () => {
     }
 
     const fetchToken = async()=>{
-        await axios.get(`http://localhost:8080/api/getToken/${id}`,{
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}getToken/${id}`,{
         headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }

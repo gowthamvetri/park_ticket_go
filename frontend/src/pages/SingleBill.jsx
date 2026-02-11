@@ -12,7 +12,7 @@ const SingleBill = () => {
     const navigate = useNavigate()
 
     const fetchBill = async()=>{
-    await axios.get(`http://localhost:8080/api/getBill/${id}`,{
+    await axios.get(`${import.meta.env.VITE_BACKEND_URL}getBill/${id}`,{
       headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }
@@ -20,7 +20,7 @@ const SingleBill = () => {
     }
 
     const fetchVehicle = async()=>{
-        await axios.get(`http://localhost:8080/api/getVehicle/${bill?.vehicle}`,{
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}getVehicle/${bill?.vehicle}`,{
         headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }
@@ -28,7 +28,7 @@ const SingleBill = () => {
     }
 
     const fetchToken = async()=>{
-        await axios.get(`http://localhost:8080/api/getToken/${bill?.token}`,{
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}getToken/${bill?.token}`,{
         headers:{
         Authorization:`Bearer ${localStorage.getItem("token")}`
       }
@@ -48,7 +48,7 @@ const SingleBill = () => {
         setLoading(true);
         try {
             const response = await axios.post(
-                'http://localhost:8080/api/create-checkout-session',
+                '${import.meta.env.VITE_BACKEND_URL}create-checkout-session',
                 { billId: id },
                 {
                     headers: {
