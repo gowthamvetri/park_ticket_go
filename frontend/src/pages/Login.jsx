@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import { useAuth } from '../context/AuthContext'
 import car from "../assets/car.mp4"
+import {toast} from "react-toastify"
 
 const Login = () => {
     const [user,setUser] = useState({
@@ -29,11 +30,13 @@ const Login = () => {
             }).then((data)=>{
                 console.log(data.data)
                 login({token:data.data.token})
+                toast.success("Logged in successfully")
                 navigate("/dashboard")
             })
             
         }
         catch(err){
+            toast.error("Make sure that everything in credentials are right")
             console.log(err)
         }
        

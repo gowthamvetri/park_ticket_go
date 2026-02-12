@@ -8,7 +8,7 @@ import paymentRoutes from "./routes/payment.routes.js"
 import { handleWebhook } from "./controller/payment.controller.js"
 import cors from "cors"
 
-
+db()
 dotenv.config()
 
 const app = express()
@@ -18,7 +18,8 @@ app.post('/api/webhook', express.raw({ type: 'application/json' }), handleWebhoo
 
 app.use(express.json())
 app.use(cors([
-    "http://localhost:5173/**"
+    "http://localhost:5173/**",
+    "https://park-to-go.vercel.app/**"
 ]))
 
 app.use('/api',authRoutes);

@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     const getRole = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8080/api/getRole",
+          `${import.meta.env.VITE_BACKEND_URL}getRole`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`

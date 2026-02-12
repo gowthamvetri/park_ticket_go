@@ -32,7 +32,7 @@ const Navbar = () => {
     const location = useLocation()
     
     const fetchAdmin = async()=>{
-        await axios.get("http://localhost:8080/api/getAdmin",{
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}getAdmin`,{
                 headers:{
                     Authorization:`Bearer ${localStorage.getItem("token")}`
                 }
@@ -40,7 +40,7 @@ const Navbar = () => {
     }
 
     const fetchUser = async()=>{
-            await axios.get("http://localhost:8080/api/getInfo",{
+            await axios.get(`${import.meta.env.VITE_BACKEND_URL}getInfo`,{
                 headers:{
                     Authorization:`Bearer ${localStorage.getItem("token")}`
                 }
