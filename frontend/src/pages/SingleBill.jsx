@@ -48,7 +48,7 @@ const SingleBill = () => {
         setLoading(true);
         try {
             const response = await axios.post(
-                '${import.meta.env.VITE_BACKEND_URL}create-checkout-session',
+                `${import.meta.env.VITE_BACKEND_URL}create-checkout-session`,
                 { billId: id },
                 {
                     headers: {

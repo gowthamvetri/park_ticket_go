@@ -60,7 +60,7 @@ const Profile = () => {
       }
   
       const fetchUser = async()=>{
-              await axios.get("${import.meta.env.VITE_BACKEND_URL}getInfo",{
+              await axios.get(`${import.meta.env.VITE_BACKEND_URL}getInfo`,{
                   headers:{
                       Authorization:`Bearer ${localStorage.getItem("token")}`
                   }
@@ -94,10 +94,10 @@ const Profile = () => {
           <form action="" className='flex flex-col gap-5'>
             {
               role==="User" &&
-            <input className='px-4 py-2 border-double border-2 rounded border-gray-400' disabled={!isEdit} type="text" name="name" id="" value={user.name} onChange={handleChange}/>
+            <input className='px-4 py-2 border-double border-2 rounded border-gray-400' disabled={!isEdit} type="text" name="name" id="" value={user?.name} onChange={handleChange}/>
             }
             
-            <input className='px-4 py-2 border-double border-2 rounded border-gray-400' disabled={!isEdit} type="email" name="email" id="" value={user.email} onChange={handleChange}/>
+            <input className='px-4 py-2 border-double border-2 rounded border-gray-400' disabled={!isEdit} type="email" name="email" id="" value={user?.email} onChange={handleChange}/>
             <h1>Change Password:</h1>
            
             { role==="Admin" &&
@@ -106,7 +106,7 @@ const Profile = () => {
 
             {
               role==="User" &&
-            <input className='px-4 py-2 border-double border-2 rounded border-gray-400' disabled={!isEdit} type="text" name="phone" id="" value={user.phone} onChange={handleChange}/>
+            <input className='px-4 py-2 border-double border-2 rounded border-gray-400' disabled={!isEdit} type="text" name="phone" id="" value={user?.phone} onChange={handleChange}/>
             }
             <input className='bg-gray-500/70 py-2 rounded' type="submit" value={!isEdit?"Edit":"Update"} onClick={handleEdit}/>
           </form>
