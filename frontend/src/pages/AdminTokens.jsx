@@ -101,10 +101,7 @@ const AdminTokens = () => {
         Token Page
         </RoughNotation>
       </h1>
-        {/* <div className='absolute bottom-10 right-10 bg-gray-500/60 p-5 rounded-full text-white' onClick={()=>setGen((pre)=>!pre)}><FaPlus/></div> */}
-        { tokens.length > 0 ?
-        (<div className='flex flex-col gap-5 items-center'>
-            <div className='grid grid-cols-3 w-full gap-5 items-center'>
+            <div className='grid grid-cols-3 w-full gap-5 items-center px-20'>
                     <div className='text-center w-fit'>
                         <label className='w-full text-xl' htmlFor="">Enter the Vehicle number </label>
                     </div>
@@ -117,6 +114,9 @@ const AdminTokens = () => {
                          <input className='px-4 py-2 bg-gray-400 text-white rounded-lg cursor-pointer capitalize' type='submit' value={"Add Entry"} onClick={()=>setGen((pre)=>!pre)}/>
                     </div>
                 </div>
+        {/* <div className='absolute bottom-10 right-10 bg-gray-500/60 p-5 rounded-full text-white' onClick={()=>setGen((pre)=>!pre)}><FaPlus/></div> */}
+        { tokens.length > 0 ?
+        (<div className='flex flex-col gap-5 items-center'>
             <table className='grid grid-cols-1 items-center'>
                 <tr className='grid grid-cols-6 border text-2xl'>
                     <th>Token Id</th>

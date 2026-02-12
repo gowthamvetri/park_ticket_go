@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import img from "../assets/vehicle.jpg"
+import img from "../assets/empty.png"
 import { RoughNotation } from 'react-rough-notation'
 import axios from 'axios'
 import {toast} from "react-toastify"
@@ -99,15 +99,15 @@ const AdminVehicles = () => {
                     </div>
                 </div>
 
-      <div className='grid grid-cols-3 items-center gap-x-20 gap-y-10'>
+      
         {
-          vehicle ? renderVehicles() :(
-            <div className='text-center text-4xl'>
-              No vehicles
-            </div>
+          vehicle ? <div className='grid grid-cols-3 items-center gap-x-20 gap-y-10'>{renderVehicles()}</div> :(
+            <div className='flex flex-col items-center justify-center'>
+              <img src={img} alt="" />
+              <h1 className='text-center text-4xl text-gray-400 animate-bounce'>No bills generated yet . Empty!!!</h1>
+          </div>
           )
         }
-      </div>
       
     </div>
   )
