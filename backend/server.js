@@ -20,7 +20,7 @@ app.use(express.json())
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://park-to-go.vercel.app"
+    "https://park-ticket-go.vercel.app/"
   ],
   credentials: true
 }));
