@@ -7,8 +7,8 @@ import {toast} from "react-toastify"
 const Register = () => {
     const [user,setUser] = useState({
         email:"",
-        consfirmPass:"",
-        password:""
+        name:"",
+        phone:""
     })
     const navigate = useNavigate()
     const handleChange = (e)=>{
@@ -21,17 +21,19 @@ const Register = () => {
     const handleSubmit = async(e)=>{
         e.preventDefault()
 
-        if(user.password===user.consfirmPass){
+        
             try{
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}login`,{
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}register`,{
+                name:user.name,
                 email:user.email,
-                password:user.password
+                phone:user.phone
             })
-            navigate("/")
-            toast.success("Account Registered Successfully")
+            if(response.data.success){
+                navigate("/")
+                toast.success("Account Registered Successfully")
+            }
         }catch(err){
             toast.error("Unable to register "+err)
-        }
         }
         toast.error("Unable to create account make sure password are matched")
     }
@@ -43,9 +45,9 @@ const Register = () => {
         <div className='sm:min-w-sm max-w-md min-w-xs bg-gray-300 px-10 py-8 flex flex-col gap-7 scale-110 rounded-tr-[5rem] rounded-bl-[5rem]'>
             <h1 className='text-center text-2xl font-medium'>Register</h1>
             <form action="" className='flex flex-col gap-7'>
+                <input className='border p-2 rounded' type="text" placeholder='Jhon' name='name'  onChange={handleChange} value={user.name}/>
                 <input className='border p-2 rounded' type="email" placeholder='Email@example.com' name='email' onChange={handleChange} value={user.email}/>
-                <input className='border p-2 rounded' type="password" placeholder='Password' name='password'  onChange={handleChange} value={user.password}/>
-                <input className='border p-2 rounded' type="password" placeholder='Confirm Password' name='consfirmPass' onChange={handleChange} value={user.consfirmPass}/>
+                <input className='border p-2 rounded' type="text" placeholder='8375729467' name='phone' onChange={handleChange} value={user.phone}/>
                 <input className='py-2 bg-gray-700 text-white rounded' type="submit" onClick={handleSubmit}/>
             </form>
             <p className='text-center'>Have account already <Link to={'/'} className='text-gray-400'>Login!</Link></p>
