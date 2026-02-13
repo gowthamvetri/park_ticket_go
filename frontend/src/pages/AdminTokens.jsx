@@ -150,7 +150,7 @@ const AdminTokens = () => {
             gen && (
                 <div className='absolute w-full h-full bg-black/40 flex items-center justify-center'>
                     <div className='bg-white py-7 px-15 flex flex-col gap-3 rounded-xl'>
-                        <h1>Generate Bill</h1>
+                        <h1>Generate Token</h1>
                         <div className='flex flex-col gap-2'>
                             <label htmlFor="">Enter Name</label>
                             <input type="text" name='name' className='border px-5 py-2 rounded-2xl' onChange={handleChange} value={data.name}/>
