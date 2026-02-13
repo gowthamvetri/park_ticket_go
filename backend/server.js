@@ -9,7 +9,7 @@ import { handleWebhook } from "./controller/payment.controller.js"
 import cors from "cors"
 
 dotenv.config()
-db()
+await db()
 
 const app = express()
 
@@ -19,7 +19,7 @@ app.use(express.json())
 
 app.use(cors({
   origin: [
-    "http://localhost:5173",
+    "http://localhost:5175",
     "https://park-ticket-go.vercel.app"
   ],
   credentials: true

@@ -12,7 +12,7 @@ export const createCheckoutSession = async (req, res) => {
         const { billId } = req.body;
 
         const bill = await Bill.findById(billId).populate('vehicle').populate('user');
-
+        console.log("Bill details:", bill);
         if (!bill) {
             return res.status(404).json({
                 message: "Bill not found",
