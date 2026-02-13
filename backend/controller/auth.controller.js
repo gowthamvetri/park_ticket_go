@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 
 export const register = async(req,res)=>{
-    const {name,email,phone,role} = req.body
+    const {name,email,phone,userRole} = req.body
 
     if(!name||!email||!phone){
         return res.status(400).json({
@@ -13,8 +13,10 @@ export const register = async(req,res)=>{
             error:true
         })
     }
-
-    if(!role) role = "User";
+    let role = userRole;
+    if(!role){
+        role = "User"
+    }
 
     const existUser = await Auth.findOne({email:email})
 
