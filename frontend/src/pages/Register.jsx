@@ -35,7 +35,7 @@ const Register = () => {
         }catch(err){
             toast.error("Unable to register "+err)
         }
-        toast.error("Unable to create account make sure password are matched")
+        // toast.error("Unable to create account make sure password are matched")
     }
 
   return (
